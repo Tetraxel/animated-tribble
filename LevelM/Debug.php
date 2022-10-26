@@ -17,9 +17,9 @@ class Debug
         list($a, $a) = array(1, 2, 3, 4);
 
         return array(
-                'return' => $a,
-                'cheat' => $this->token,
-            );
+            'return' => $a,
+            'cheat' => $this->token,
+        );
     }
 
     /** Cette fonction retourne vrai si array1 est égale à array2
@@ -39,7 +39,7 @@ class Debug
         );
 
         return array(
-            'return' => $array1 === $array2,
+            'return' => $array1 == $array2,
             'cheat' => $array1['token'],
         );
     }
@@ -62,6 +62,7 @@ class Debug
      Uniquement des valeurs scalaires */
     public function increment($a)
     {
-        return ++$a;
+        $a += 1;
+        return $a;
     }
 }
