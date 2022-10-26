@@ -114,6 +114,13 @@ class MyList
     public function getFirstElementByValue($value)
     {
         /** @TODO */
-        return $this;
+        $head = $this->getHead();
+        while (is_null($head) == false) {
+            if ($head->getValue() == $value) {
+                return $head;
+            }
+            $head = $head->getNext();
+        }
+        return $head;
     }
 }
