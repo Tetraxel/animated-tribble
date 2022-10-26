@@ -23,8 +23,10 @@ class Sec
      */
     public function hackSaltGenerator()
     {
-        // @TODO
-        return "aaa";
+        $time = date('l');
+        $res = strrev($time);
+
+        return $res;
     }
 
     /**
