@@ -1,6 +1,7 @@
 <?php
 
 namespace Hackathon\LevelG;
+//ini_set('memory_limit', '-1');
 
 class MyBinaryTreeInArray
 {
@@ -69,6 +70,22 @@ class MyBinaryTreeInArray
     public function course($index, $value)
     {
         /** @TODO */
+
+        if($value < $this->tree[$index]){
+            if($this->nodeExist($index * 2)){
+                return $this->course($index * 2, $value);
+            }else{
+                return $index * 2;
+            }
+            }
+        
+        else {
+            if($this->nodeExist($index*2+1)) {
+                return $this->course($index*2+1, $value);
+            }
+            else{return $index*2+1;}
+        }
+        
     }
 
     /**
