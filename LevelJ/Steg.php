@@ -139,7 +139,7 @@ class Steg
     }
 
     /**
-     * @TODO : A vous de faire le boulot :)
+     * @TODO : A vous de faire le boulot :(
      *
      * @param $dst
      *
@@ -147,14 +147,53 @@ class Steg
      */
     public function show($dst)
     {
-        $msg = '000010000100001000000';
-        $this->bin2Text($msg);
+        // $msg = '000010000100001000000';
+        // $this->bin2Text($msg);
 
+        // Analyse et Création de l'image
+        $dstImg = ImageCreateFromPng($dst);
+        list($width, $height) = getimagesize($dst);
+
+        // Sentinelle pour parcourir notre message binarisé
+        $res = "";
+        // Compteur de '1', pour arrêter la conversion dés que c'est fini
+        $stop = 0;
+
+        for ($i = 0; $i < $width; ++$i) {
+            for ($j = 0; $j < $height; ++$j) {
+
+                // Extraction du triplet de couleur, r (rouge), g (vert), b (bleu)
+                $rgb = imagecolorat($dstImg, $i, $j);
+                $r = ($rgb >> 16) & 0xFF;
+                $g = ($rgb >> 8) & 0xFF;
+                $b = $rgb & 0xFF;
+
+                // Tant qu'il y a des bits à récuperer, on les recupere.
+                // Le 6x'1' signe la fin du message à cacher
+                if ($stop <= 6) {
+                    // La valeur est stocké dans le bit de poids faible de la couleur bleu.
+                    // On regarde la valeur binaire du bleu
+                    $blue = decbin($b);
+
+                    $lastblue = substr($blue, -1);
+
+                    $res = $res . $lastblue;
+
+                    // On gère ici la fin du "décodage" :(
+                    if ('1' === $lastblue) {
+                        ++$stop;
+                    } else {
+                        $stop = 0;
+                    }
+                }
+            }
+        }
+        $this->bin2Text($res);
         return true;
     }
 
     /**
-     * Cette méthode dégueulasse permet d'initialiser le bordel (facilite le débug).
+     * Cette méthode dégueulasse permet d'initialiser le bordel (facilite le débug) (c'est quoi ce langage ??).
      *
      * @param $src fichier source
      * @param $dst fichier de destination
@@ -217,7 +256,7 @@ class Steg
         $plain = strtr($this->slugify($txt), $this->trans);
 
         // Ajout de 6x1 pour marquer la fin de la chaîne.
-        return $plain.'111111';
+        return $plain . '111111';
     }
 
     /**
