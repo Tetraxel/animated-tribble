@@ -21,7 +21,6 @@ class Palindrome
     public function generatePalindrome()
     {
         /** @TODO */
-        //palindrome php working with every caracter
         $ref = $this->str;
         preg_match_all('/./us', $this->str, $ar);
         $str = join('', array_reverse($ar[0]));
