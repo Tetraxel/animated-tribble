@@ -1,7 +1,7 @@
 <?php
 
 namespace Hackathon\LevelH;
-
+ini_set('memory_limit', '-1');
 class Geo
 {
     public function __construct()
@@ -16,12 +16,23 @@ class Geo
         $srcCity = $myCities->getCityInfoById($id);
         $closestDistance = PHP_INT_MAX;
         $closestCity = $srcCity;
+        $pythagore = PHP_INT_MAX;
         $cosDeg2RadLat1 = cos(deg2rad($srcCity['lat']));
 
         foreach ($cities as $dstCity) {
             if ($dstCity['id'] === $srcCity['id']){
                 continue;
             }
+
+            $interlat = $srcCity['lat'] - $dstCity['lat'];
+            $interlog = $srcCity['long'] - $dstCity['long'];
+            $inter = sqrt($interlat*$interlat + $interlog*$interlog);
+
+
+            if ($pythagore < $inter)
+                continue;
+            
+            $pythagore = $inter;
 
             $distance = $this->computeDistance(
                 $srcCity['lat'],
@@ -52,20 +63,14 @@ class Geo
      */
 
     private function computeDistance($lat1, $lng1, $lat2, $lng2, $cosDeg2RadLat1){
+        $R = 6378.137;
+        $PI_360 = pi() / 360;
 
-        $earth_radius = 6378137; // Earth Radius is 6378.137 km
-        $rlo1 = deg2rad($lng1);
-        $rla1 = deg2rad($lat1);
-        $rlo2 = deg2rad($lng2);
-        $rla2 = deg2rad($lat2);
-        $dlo = ($rlo2 - $rlo1) / 2;
-        $dla = ($rla2 - $rla1) / 2;
-        $a =
-            (sin($dla) * sin($dla)) +
-            cos($rla1) * cos($rla2) *
-            (sin($dlo) * sin($dlo));
-        $d = 2 * atan2(sqrt($a), sqrt(1 - $a));
-
-        return ($earth_radius * $d) / pow(10, 3);
+        $cLat = cos(($lat1 + $lat2) * $PI_360);
+        $dLat = ($lat2 - $lat1) * $PI_360;
+        $dLon = ($lng2 - $lng1) * $PI_360;
+        $f = $dLat * $dLat + $cLat * $cLat * $dLon * $dLon;
+        $c = 2 * atan2(sqrt($f), sqrt(1 - $f));   
+        return $R * $c;
     }
 };
