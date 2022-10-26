@@ -62,7 +62,14 @@ class Debug
      Uniquement des valeurs scalaires */
     public function increment($a)
     {
-        $a += 1;
+        if (is_string($a)) {
+            $array = str_split($a);
+            $array[count($array) - 1] = chr(ord($array[count($array) - 1]) + 1);
+            $a = implode($array);
+        } elseif (is_int($a)) {
+            $a++;
+        }
+
         return $a;
     }
 }
