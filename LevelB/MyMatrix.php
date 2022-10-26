@@ -62,7 +62,7 @@ class MyMatrix
                 if (!is_null($this->matrix[$i][$j])) {
                     $val = $this->matrix[$i][$j];
                 }
-                $res .= $val."\t";
+                $res .= $val . "\t";
             }
             $res .= "\n";
         }
@@ -83,8 +83,28 @@ class MyMatrix
      */
     public function fillZero()
     {
-        /** @TODO */
+        print "PONG ";
+        $this->prettyMatrix();
+        print "PING ";
+        $copy = $this->matrix;
+        // fwrite(STDERR, print_r($this->matrix, TRUE));
 
+        // on parcours tout
+        for ($i = 0; $i < $this->iMax; ++$i) {
+            for ($j = 0; $j < $this->jMax; ++$j) {
+                $iszero = false;
+                if ($copy[$i][$j] == 0)
+                {
+                    for ($k = 0; $k < $this->iMax; ++$k) {
+                        $this->matrix[$k][$j] = 0;
+                    }
+                    for ($l = 0; $l < $this->jMax; ++$l) {
+                        $this->matrix[$i][$l] = 0;
+                    }
+                }
+            }
+        }
+        $this->prettyMatrix();
         return $this;
     }
 }
