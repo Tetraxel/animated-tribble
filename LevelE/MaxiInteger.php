@@ -46,6 +46,9 @@ class MaxiInteger
     private function realSum($a, $b)
     {
         /** @TODO */
+        $a->setValue($a->getValue() + $b->getValue());
+
+        return $a;
     }
 
     private function setValue($value)
